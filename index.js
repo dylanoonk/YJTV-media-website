@@ -6,6 +6,9 @@ const helpers = require('./helpers');
 
 const app = express();
 
+if(!fs.existsSync('./uploads')) {
+  fs.mkdirSync('./uploads');
+}
 
 // list media files
 app.get('/media', (req, res) => {

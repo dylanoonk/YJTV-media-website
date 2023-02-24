@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>YJTV Media</title>
+        <div class="title">
+            <h1>YJTV Media</h1>
+        </div>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <style>
+            .title {
+                text-align: center;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font: bold 30px Roboto, sans-serif;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
+            .form-group {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="POST" action="/upload" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="user_upload">Upload a file:</label>
+                            <input type="file" class="form-control-file" id="user_upload" name="user_upload" accept=".jpg, .jpeg, .png, .gif, .mov, .mp4, .svg, .mkv" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody id="files"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var files = document.getElementById('files');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/media', true);
+            xhr.onload = function(e) {
+              if (this.status == 200) {
+                var response = JSON.parse(this.response);
+                for (var i = 0; i < response.length; i++) {
+                  var file = response[i];
+                  var extension = file.split('.').pop().toLowerCase();
+                  var tr = document.createElement('tr');
+                  var tdMedia = document.createElement('td');
+                  var tdDownload = document.createElement('td');
+                  if (extension === 'mp4' || extension === 'mov' || extension === 'mkv') {
+                    var video = document.createElement('video');
+                    video.src = file;
+                    video.controls = true;
+                    video.style.maxWidth = '100%';
+                    video.style.maxHeight = '200px';
+                    tdMedia.appendChild(video);
+                  } else {
+                    var img = document.createElement('img');
+                    img.src = file;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '200px';
+                    tdMedia.appendChild(img);
+                  }
+                  tr.appendChild(tdMedia);
+                  var downloadButton = document.createElement('a');
+                  downloadButton.href = '/uploads/' + file.split('/').pop();
+                  downloadButton.innerHTML = 'Download';
+                  downloadButton.className = 'btn btn-primary';
+                  downloadButton.style.marginTop = '10px';
+                  tdDownload.appendChild(downloadButton);
+                  tr.appendChild(tdDownload);
+                  files.appendChild(tr);
+                }
+              }
+            };
+            xhr.send();
+          </script>
+          
+
+    </body>
+</html>

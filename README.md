@@ -24,7 +24,7 @@ npm install express multer
 ```bash
 npm start
 ```
-The server will be running on port the default port of `3000` but that can be changed in `index.js`.
+The server will be running on the default port of `3000` but that can be changed in `index.js`.
 
 ## License
 [GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)

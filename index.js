@@ -12,9 +12,7 @@ if(!fs.existsSync('./uploads')) {
 
 // list media files
 app.get('/media', (req, res) => {
-  const uploadsFolder = './uploads/';
-  const files = fs.readdirSync(uploadsFolder).map(file => `/uploads/${file}`);
-  res.json(files);
+  app.send(JSON.parse(fs.readFileSync('./uploads/media.json', 'utf8')));
 });
  
 // handle favicon request
@@ -62,6 +60,26 @@ app.post('/upload', (req, res) => {
     }
 
     // refresh the page
+    if (fs.existsSync('/uploads/media.json')) {
+      //add new file to media.json
+      const media = JSON.parse(fs.readFileSync('./uploads/media.json', 'utf8'));
+      media.push({location: `/uploads/${req.file.filename}`,
+                  name: req.file.originalname});
+      fs.writeFileSync('./uploads/media.json', JSON.stringify(media));
+    } else {
+      // create media.json
+      const media  = [];
+      for (const file of fs.readdirSync('./uploads')) {
+        if (file != 'media.json') {
+          media.push({
+            filetype: helpers.getFileType(file),
+            location: `/uploads/${file}`,
+            name: file
+          });
+        }
+      }
+      fs.writeFileSync('./uploads/media.json', JSON.stringify(media));
+    }
     res.send(`<script>window.location.href = '/';</script>`);
   });
 });
@@ -80,31 +98,6 @@ app.get('/uploads/:folder/:file', (req, res) => {
   const fileLocation = path.join('./uploads', folder, file);
   res.download(fileLocation, file);
 });
-
-app.post('/isdir', (req, res) => {
-  const name = req.body.name;
-  //check if name is a directory
-  if (fs.lstatSync(name).isDirectory()) {
-    res.send('true');
-  } else {
-    res.send('false');
-  }
-});
-
-app.post('/makefolder', (req, res) => {
-  const folderName = req.body.name;
-  const folderPath = path.join('./uploads', folderName);
-  if(!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
-    res.send(`<script>window.location.href = '/';</script>`);
-  } else {
-    console.log('Folder already exists');
-    res.send('Folder Already Exists! <button onclick="window.history.back()">Go Back</button>')
-  }
-
-
-});
-
 
 // start server
 const PORT = 3000;

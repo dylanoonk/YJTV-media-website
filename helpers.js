@@ -6,4 +6,35 @@ const imageFilter = function(req, file, cb) {
     }
     cb(null, true);
 };
+
+
+const getFileType = function(file) {
+    if (file.isDirectory()) {
+        return "folder"
+    }
+    const ext = path.extname(file);
+    switch (ext) {
+        case '.jpg':
+        case '.JPG':
+        case '.jpeg':
+        case '.JPEG':
+        case '.png':
+        case '.PNG':
+        case '.gif':
+        case '.GIF':
+        case '.svg':
+        case '.SVG':
+            return 'image';
+        case '.mov':
+        case '.MOV':
+        case '.mp4':
+        case '.MP4':
+        case '.mkv':
+        case '.MKV':
+            return 'video';
+        default:
+            return 'other';
+    }
+};
 exports.imageFilter = imageFilter;
+exports.getFileType = getFileType;

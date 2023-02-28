@@ -81,6 +81,31 @@ app.get('/uploads/:folder/:file', (req, res) => {
   res.download(fileLocation, file);
 });
 
+app.post('/isdir', (req, res) => {
+  const name = req.body.name;
+  //check if name is a directory
+  if (fs.lstatSync(name).isDirectory()) {
+    res.send('true');
+  } else {
+    res.send('false');
+  }
+});
+
+app.post('/makefolder', (req, res) => {
+  const folderName = req.body.name;
+  const folderPath = path.join('./uploads', folderName);
+  if(!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+    res.send(`<script>window.location.href = '/';</script>`);
+  } else {
+    console.log('Folder already exists');
+    res.send('Folder Already Exists! <button onclick="window.history.back()">Go Back</button>')
+  }
+
+
+});
+
+
 // start server
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

@@ -128,3 +128,4 @@ dist
 
 #ignore anything inside the uploads folder 
 uploads/*
+.vscode/

@@ -2,15 +2,15 @@
 
 
 ## Description
-This is a media storage website for YJTV. It is a simple website that allows users to upload and download media files. It is built using Node.js and Express.
+This is an EXTREMELY SIMPLE media storage website for YJTV. It is a SIMPLE website that allows users to upload and download media files. It is built using Node.js and Express. This project will not be updated as I needed it briefly many years ago and I am no longer part of YJTV.
 
 Example Image:
 ![Example Image](https://i.imgur.com/kwHJec3.png)
 
 ## Requirements
 
-- Node.js (and npm)
-- Express (moving to React soon)
+- Node.js 
+- Express 
 - Multer
 
 ## Installation
